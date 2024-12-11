@@ -4,7 +4,11 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
+
+    build: {
+      assetsDir: './src/main/prisma/dev.db',
+    },
   },
   preload: {
     plugins: [externalizeDepsPlugin()]

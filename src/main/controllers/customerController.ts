@@ -1,8 +1,15 @@
-import { Request, Response } from "express";
 import { prisma } from "../db/database";
 
-export class CustomerController {
-  async createCustomer(req: Request, res: Response): Promise<Response> {
+export interface CustomerProps{
+  customer_name: string
+  customer_email: string
+  customer_phone: string
+  customer_address: string
+  customer_cpf: string
+
+}
+
+export async function createCustomer(data: CustomerProps){
     try {
       const {
         customer_name,
@@ -10,7 +17,7 @@ export class CustomerController {
         customer_phone,
         customer_address,
         customer_cpf,
-      } = req.body;
+      } = data;
 
       const userExists = await prisma.customer.findFirst({
         where: {
@@ -25,16 +32,16 @@ export class CustomerController {
 
       if (userExists) {
         if (userExists.customer_name === customer_name) {
-          return res.status(400).send("Nome já cadastrado");
+          throw new Error("Nome já cadastrado")
         }
         if (userExists.customer_cpf === customer_cpf) {
-          return res.status(400).send("CPF já cadastrado");
+          throw new Error("CPF já cadastrado");
         }
         if (userExists.customer_email === customer_email) {
-          return res.status(400).send("Email já cadastrado");
+          throw new Error("Email já cadastrado");
         }
         if (userExists.customer_phone === customer_phone) {
-          return res.status(400).send("Telefone já cadastrado");
+          throw new Error("Telefone já cadastrado");
         }
       }
 
@@ -46,22 +53,18 @@ export class CustomerController {
           customer_address: customer_address as string,
           customer_cpf: customer_cpf as string,
         },
-      });
-
-      return res.status(201).json({ msg: "Cliente criado com sucesso" });
+      })
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ msg: "Erro interno" });
     }
   }
 
-  async getCustomers(_: Request, res: Response): Promise<Response> {
+export async function getCustomers(){
     try {
       const customers = await prisma.customer.findMany();
-      return res.status(200).json(customers);
+      
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ msg: "Erro interno" });
     }
   }
 
@@ -155,4 +158,3 @@ export class CustomerController {
       return res.status(500).json({ msg: "Erro interno" });
     }
   }
-}

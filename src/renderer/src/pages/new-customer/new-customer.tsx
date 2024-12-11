@@ -17,14 +17,18 @@ const validationSchema = Yup.object({
     .required("O CPF é obrigatório"),
 });
 
-const MaskedInput = ({ field, mask, ...props }: FieldProps & { mask: string }) => (
+const MaskedInput = ({
+  field,
+  mask,
+  ...props
+}: FieldProps & { mask: string }) => (
   <InputMask mask={mask} {...field} {...props} />
 );
 
 export function NewCustomer() {
   const handleCreateCustomer = async (values: FormikValues) => {
     try {
-      const response = await (window.api as any).sendCustomer({
+      const response = await window.api.sendCustomerData({
         customer_name: values.customer_name,
         customer_email: values.customer_email,
         customer_phone: values.customer_phone,
@@ -41,7 +45,7 @@ export function NewCustomer() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "dark",
+          theme: "colored",
         });
       } else {
         throw new Error(response.error || "Erro desconhecido");

@@ -1,25 +1,26 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { routes } from './routes/index' 
-import express from 'express'
-import cors from 'cors'
-import icon from '../../resources/icon.png?asset'
+// import { routes } from './routes/index' 
+// import express from 'express'
+// import cors from 'cors'
+import icon from '../../resources/icon.png'
 
-const appServer = express()
-appServer.use(cors({
-  origin: is.dev ? "http://localhost:5173" : "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true,
-}));
-appServer.use(express.json());
-appServer.use(express.urlencoded({ extended: false }));
+// const appServer = express()
+// appServer.use(cors({
+//   origin: is.dev ? "http://localhost:5173" : "*",
+//   methods: ["GET", "POST", "PUT", "DELETE"],
+//   credentials: true,
+// }));
+// appServer.use(express.json());
+// appServer.use(express.urlencoded({ extended: false }));
 
-appServer.use(routes)
+// appServer.use(routes)
 
-appServer.listen(3000, () => {
-  console.log('Express server running on http://localhost:3000');
-})
+// appServer.listen(3000, () => {
+//   console.log('Express server running on http://localhost:3000');
+// })
+
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
