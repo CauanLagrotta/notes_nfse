@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from "electron";
-import { ElectronAPI, electronAPI } from "@electron-toolkit/preload";
+import { electronAPI, type ElectronAPI } from "@electron-toolkit/preload";
+import type { CustomerProps } from "../main/types/types";
 
 declare global {
   interface Window {
@@ -10,17 +11,25 @@ declare global {
 
 // Custom APIs for renderer
 const api = {
-  sendCustomerData: (customer: {
-    customer_name: string;
-    customer_email: string;
-    customer_phone: string;
-    customer_address: string;
-    customer_cpf: string;
-
-  }) => {
-    ipcRenderer.invoke("create-new-customer", customer);
+  createCustomer: async(data: CustomerProps) => {
+    return await ipcRenderer.invoke("createCustomer", data);
   },
 
+  getCustomers: async() => {
+    return await ipcRenderer.invoke("getCustomers");
+  },
+
+  getSearchCustomer: async(data: string) => {
+    return await ipcRenderer.invoke("getSearchCustomer", data);
+  },
+
+  updateCustomer: async(id: number, data: CustomerProps) => {
+    return await ipcRenderer.invoke("updateCustomer", id, data);
+  },
+
+  deleteCustomer: async(id: number) => {
+    return await ipcRenderer.invoke("deleteCustomer", id);
+  }
   
 };
 

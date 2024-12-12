@@ -1,25 +1,8 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-// import { routes } from './routes/index' 
-// import express from 'express'
-// import cors from 'cors'
 import icon from '../../resources/icon.png'
-
-// const appServer = express()
-// appServer.use(cors({
-//   origin: is.dev ? "http://localhost:5173" : "*",
-//   methods: ["GET", "POST", "PUT", "DELETE"],
-//   credentials: true,
-// }));
-// appServer.use(express.json());
-// appServer.use(express.urlencoded({ extended: false }));
-
-// appServer.use(routes)
-
-// appServer.listen(3000, () => {
-//   console.log('Express server running on http://localhost:3000');
-// })
+import "./ipc"
 
 function createWindow(): void {
   // Create the browser window.
@@ -69,30 +52,6 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
-
-  ipcMain.handle('create-new-customer', async (_, customer) =>{
-    try{
-      const response = await fetch('http://localhost:3000/api/customers', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(customer)
-      });
-
-      const data = await response.json();
-
-      if(!response.ok){
-        throw new Error(data?.msg || 'Ocorreu um erro ao criar o cliente');
-      }
-
-      return { success: true, data };
-
-    }catch(error){
-      console.error('Erro ao criar o cliente:', error);
-      return { success: false, msg: 'Ocorreu um erro ao criar o cliente' };
-    }
-  })
 
   createWindow()
 

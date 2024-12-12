@@ -2,8 +2,20 @@
 const electron = require("electron");
 const preload = require("@electron-toolkit/preload");
 const api = {
-  sendCustomerData: (customer) => {
-    electron.ipcRenderer.invoke("create-new-customer", customer);
+  createCustomer: async (data) => {
+    return await electron.ipcRenderer.invoke("createCustomer", data);
+  },
+  getCustomers: async () => {
+    return await electron.ipcRenderer.invoke("getCustomers");
+  },
+  getSearchCustomer: async (data) => {
+    return await electron.ipcRenderer.invoke("getSearchCustomer", data);
+  },
+  updateCustomer: async (id, data) => {
+    return await electron.ipcRenderer.invoke("updateCustomer", id, data);
+  },
+  deleteCustomer: async (id) => {
+    return await electron.ipcRenderer.invoke("deleteCustomer", id);
   }
 };
 if (process.contextIsolated) {

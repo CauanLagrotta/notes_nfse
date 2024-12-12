@@ -1,13 +1,5 @@
 import { prisma } from "../db/database";
-
-export interface CustomerProps{
-  customer_name: string
-  customer_email: string
-  customer_phone: string
-  customer_address: string
-  customer_cpf: string
-
-}
+import { CustomerProps } from "../types/types";
 
 export async function createCustomer(data: CustomerProps){
     try {
@@ -56,24 +48,21 @@ export async function createCustomer(data: CustomerProps){
       })
     } catch (error) {
       console.error(error);
+      throw error
     }
   }
 
 export async function getCustomers(){
     try {
-      const customers = await prisma.customer.findMany();
+      return await prisma.customer.findMany();
       
     } catch (error) {
       console.error(error);
     }
   }
 
-  async getSearchCustomer(req: Request, res: Response): Promise<Response> {
+export async function getSearchCustomer(customerName: string | undefined){
     try {
-      const customerName = req.query.customer_name
-        ? (req.query.customer_name as string)
-        : "";
-  
       const customers = await prisma.customer.findMany({
         where: customerName
           ? {
@@ -87,74 +76,59 @@ export async function getCustomers(){
         },
       });
   
-      if (!customers.length) {
-        return res.status(404).json({ msg: "Nenhum cliente encontrado." });
-      }
-  
-      return res.status(200).json({ customers });
+      return customers.length ? customers : [];
     } catch (error) {
       console.error("Erro ao buscar clientes:", error);
-      return res.status(500).json({ msg: "Erro interno" });
+      throw new Error("Erro ao buscar clientes");
     }
   }
   
 
-  async updateCustomer(req: Request, res: Response): Promise<Response> {
+export async function updateCustomer(id: number, data: CustomerProps){
     try {
-      const { id } = req.params;
-      const {
-        customer_name,
-        customer_email,
-        customer_phone,
-        customer_address,
-        customer_cpf,
-      } = req.body;
-
       const customerExists = await prisma.customer.findUnique({
-        where: { id: Number(id) },
+        where: { id },
       });
 
       if (!customerExists) {
-        return res.status(404).json({ msg: "Cliente não encontrado" });
+        throw new Error("Cliente nao encontrado");
       }
 
-      await prisma.customer.update({
-        where: { id: Number(id) },
+      const customerUpdated = await prisma.customer.update({
+        where: { id },
         data: {
-          customer_name,
-          customer_email,
-          customer_phone,
-          customer_address,
-          customer_cpf,
+          customer_name: data.customer_name as string,
+          customer_email: data.customer_email as string,
+          customer_phone: data.customer_phone as string,
+          customer_address: data.customer_address as string,
+          customer_cpf: data.customer_cpf as string,
         },
-      });
+      })
 
-      return res.status(200).json({ msg: "Cliente atualizado com sucesso" });
+      return customerUpdated
+
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ msg: "Erro interno" });
+      throw new Error("Erro ao atualizar o cliente");
     }
   }
 
-  async deleteCustomer(req: Request, res: Response): Promise<Response> {
+  export async function deleteCustomer(id: number){
     try {
-      const { id } = req.params;
-
       const customerExists = await prisma.customer.findUnique({
-        where: { id: Number(id) },
+        where: { id },
       });
 
       if (!customerExists) {
-        return res.status(404).json({ msg: "Cliente não encontrado" });
+        throw new Error("Cliente nao encontrado");
       }
 
       await prisma.customer.delete({
-        where: { id: Number(id) },
-      });
+        where: { id },
+      })
 
-      return res.status(200).json({ msg: "Cliente deletado com sucesso" });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ msg: "Erro interno" });
+      throw new Error("Erro ao deletar o cliente");
     }
   }
