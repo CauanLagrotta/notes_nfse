@@ -40,7 +40,7 @@ export function NewCustomer() {
         progress: undefined,
         theme: "colored",
       });
-    } catch (error: any) {
+    } catch (error: Error | any) {
       toast.error("Erro ao cadastrar o cliente", {
         position: "top-right",
         autoClose: 3000,
