@@ -11,12 +11,12 @@ datasource db {
 }
 
 model Customer {
-  id               Int    @id @default(autoincrement())
-  customer_name    String @unique
-  customer_email   String @unique
-  customer_phone   String @unique
+  id               Int     @id @default(autoincrement())
+  customer_name    String  @unique
+  customer_email   String? @unique
+  customer_phone   String  @unique
   customer_address String
-  customer_cpf     String @unique
+  customer_cpf     String  @unique
 
   taxInvoices TaxInvoice[]
 

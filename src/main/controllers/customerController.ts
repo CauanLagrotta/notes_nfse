@@ -16,7 +16,6 @@ export async function createCustomer(data: CustomerProps){
           OR: [
             { customer_name },
             { customer_cpf },
-            { customer_email },
             { customer_phone },
           ],
         },
@@ -29,9 +28,6 @@ export async function createCustomer(data: CustomerProps){
         if (userExists.customer_cpf === customer_cpf) {
           throw new Error("CPF já cadastrado");
         }
-        if (userExists.customer_email === customer_email) {
-          throw new Error("Email já cadastrado");
-        }
         if (userExists.customer_phone === customer_phone) {
           throw new Error("Telefone já cadastrado");
         }
@@ -40,7 +36,7 @@ export async function createCustomer(data: CustomerProps){
       await prisma.customer.create({
         data: {
           customer_name: customer_name as string,
-          customer_email: customer_email as string,
+          customer_email: customer_email as string || null,
           customer_phone: customer_phone as string,
           customer_address: customer_address as string,
           customer_cpf: customer_cpf as string,
