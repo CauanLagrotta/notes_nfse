@@ -9,8 +9,7 @@ import { useState } from "react";
 
 const validationSchema = Yup.object({
   customer_name: Yup.string().required("O nome é obrigatório"),
-  customer_email: Yup.string()
-    .email("Email inválido") || null,
+  customer_email: Yup.string().email("Email inválido") || null,
   customer_phone: Yup.string().required("O telefone é obrigatório"),
   customer_address: Yup.string().required("O endereço é obrigatório"),
   customer_cpf: Yup.string()
