@@ -24,13 +24,13 @@ model Customer {
 }
 
 model TaxInvoice {
-  id                Int      @id @default(autoincrement())
-  customer_tax_name String
-  customer          Customer @relation(fields: [customer_tax_name], references: [customer_name])
-  price             Float
-  service           String
-  tax_status        String   @default("Pendente")
-  issued_date       DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  customerId  Int
+  customer    Customer @relation(fields: [customerId], references: [id])
+  price       String
+  service     String
+  tax_status  String   @default("Pendente")
+  issued_date DateTime @default(now())
 
   @@map("tax_invoices")
 }

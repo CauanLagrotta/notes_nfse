@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import TaskIcon from '@mui/icons-material/Task';
-import GroupsIcon from '@mui/icons-material/Groups';
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
-import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
+import TaskIcon from "@mui/icons-material/Task";
+import GroupsIcon from "@mui/icons-material/Groups";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import AssignmentLateIcon from "@mui/icons-material/AssignmentLate";
 
 export function Sidebar() {
   return (
-    <div className="bg-[#000] h-screen w-72 p-4 flex flex-col items-center">
+    <div className="bg-[#000] min-h-screen w-72 p-4 flex flex-col justify-center items-center">
       <h1 className="text-3xl text-[#fff] font-bold mb-6">Storage</h1>
 
       <nav className="flex flex-col gap-6 mt-5 text-xl h-full w-full">
@@ -31,13 +31,13 @@ export function Sidebar() {
           to="/tax-invoices-to-do"
           className="text-[#fff] relative group transition-all duration-300 ease-in-out flex items-center justify-between"
         >
-          <p>NFS-e não feitas</p> <AssignmentLateIcon/>
+          <p>NFS-e não feitas</p> <AssignmentLateIcon />
           <span className="absolute inset-0 rounded border-2 border-transparent group-hover:border-[#fff] group-hover:scale-105 transition-all duration-300 ease-in-out"></span>
         </Link>
 
         <Link
           to="/all-customers"
-          className="text-[#fff] relative group transition-all duration-300 ease-in-out flex items-center justify-between" 
+          className="text-[#fff] relative group transition-all duration-300 ease-in-out flex items-center justify-between"
         >
           <p>Ver todos os clientes</p> <GroupsIcon />
           <span className="absolute inset-0 rounded border-2 border-transparent group-hover:border-[#fff] group-hover:scale-105 transition-all duration-300 ease-in-out"></span>

@@ -52,7 +52,7 @@ async function getCustomers() {
   try {
     return await prisma.customer.findMany();
   } catch (error) {
-    console.error(error);
+    throw new Error("Erro ao buscar clientes");
   }
 }
 async function getSearchCustomer(customerName) {
@@ -69,7 +69,6 @@ async function getSearchCustomer(customerName) {
     });
     return customers.length ? customers : [];
   } catch (error) {
-    console.error("Erro ao buscar clientes:", error);
     throw new Error("Erro ao buscar clientes");
   }
 }
@@ -93,7 +92,6 @@ async function updateCustomer(id, data) {
     });
     return customerUpdated;
   } catch (error) {
-    console.error(error);
     throw new Error("Erro ao atualizar o cliente");
   }
 }
@@ -109,8 +107,116 @@ async function deleteCustomer(id) {
       where: { id }
     });
   } catch (error) {
-    console.error(error);
     throw new Error("Erro ao deletar o cliente");
+  }
+}
+async function createTax(dataTax) {
+  try {
+    const customer = await prisma.customer.findUnique({
+      where: { id: dataTax.customerId }
+    });
+    if (!customer) {
+      throw new Error("Cliente não encontrado.");
+    }
+    const newTaxInvoice = await prisma.taxInvoice.create({
+      data: {
+        customerId: dataTax.customerId,
+        price: dataTax.price,
+        service: dataTax.service,
+        tax_status: dataTax.tax_status || "Pendente",
+        // Valor padrão caso não seja fornecido
+        issued_date: dataTax.issued_date || /* @__PURE__ */ new Date()
+        // Data atual como padrão
+      }
+    });
+    console.log("Nota fiscal criada com sucesso:", newTaxInvoice);
+    return newTaxInvoice;
+  } catch (error) {
+    console.error("Erro ao criar nota fiscal:", error.message);
+    throw new Error(error.message);
+  }
+}
+async function getAllTaxes() {
+  try {
+    const taxes = await prisma.taxInvoice.findMany({
+      include: {
+        customer: true
+      }
+    });
+    return taxes;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Erro ao buscar NFS-e");
+  }
+}
+async function getSearchCustomerTaxes(customerName) {
+  try {
+    const customers = await prisma.customer.findMany({
+      where: {
+        customer_name: {
+          contains: customerName.toLowerCase()
+        }
+      },
+      include: {
+        taxInvoices: true
+      },
+      orderBy: {
+        customer_name: "asc"
+      }
+    });
+    if (!customerName) {
+      console.log(!customerName);
+      throw new Error("Nenhum cliente encontrado");
+    }
+    console.log(customers);
+    return customers.length ? customers : [];
+  } catch (error) {
+    console.log(error);
+    throw new Error("Erro ao buscar clientes");
+  }
+}
+async function updateStatus(id, tax_status) {
+  try {
+    const taxInvoice = await prisma.taxInvoice.update({
+      where: {
+        id: Number(id)
+      },
+      data: {
+        tax_status
+      }
+    });
+    console.log(taxInvoice);
+    return taxInvoice;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Erro ao atualizar o status");
+  }
+}
+async function updateTax(id, dataTax) {
+  try {
+    const taxUpdated = await prisma.taxInvoice.update({
+      where: { id },
+      data: {
+        customerId: dataTax.customerId,
+        price: dataTax.price,
+        service: dataTax.service,
+        issued_date: dataTax.issued_date
+      }
+    });
+    console.log(taxUpdated);
+    return taxUpdated;
+  } catch (error) {
+    throw new Error("Erro ao atualizar NFS-e");
+  }
+}
+async function deleteTax(id) {
+  try {
+    await prisma.taxInvoice.delete({
+      where: { id }
+    });
+  } catch (error) {
+    console.log(error);
+    throw new Error("Erro ao deletar NFS-e");
   }
 }
 electron.ipcMain.handle("createCustomer", async (_, data) => {
@@ -128,6 +234,26 @@ electron.ipcMain.handle("updateCustomer", async (_, id, data) => {
 });
 electron.ipcMain.handle("deleteCustomer", async (_, id) => {
   return await deleteCustomer(id);
+});
+electron.ipcMain.handle("createTax", async (_, dataTax) => {
+  if (!dataTax.customerId) throw new Error("Cliente nao encontrado");
+  console.log("dados recebidos: ", dataTax);
+  return await createTax(dataTax);
+});
+electron.ipcMain.handle("getAllTaxes", async () => {
+  return await getAllTaxes();
+});
+electron.ipcMain.handle("getSearchCustomerTaxes", async (_, dataTax) => {
+  return await getSearchCustomerTaxes(dataTax);
+});
+electron.ipcMain.handle("updateStatus", async (_, id, tax_status) => {
+  return await updateStatus(id, tax_status);
+});
+electron.ipcMain.handle("updateTax", async (_, id, dataTax) => {
+  return await updateTax(id, dataTax);
+});
+electron.ipcMain.handle("deleteTax", async (_, id) => {
+  return await deleteTax(id);
 });
 function createWindow() {
   const mainWindow = new electron.BrowserWindow({

@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { electronAPI, type ElectronAPI } from "@electron-toolkit/preload";
-import type { CustomerProps } from "../main/types/types";
+import type { CustomerProps, TaxInvoiceProps } from "../main/types/types";
 
 declare global {
   interface Window {
@@ -11,6 +11,8 @@ declare global {
 
 // Custom APIs for renderer
 const api = {
+
+  // ================ Customer Controller
   createCustomer: async(data: CustomerProps) => {
     return await ipcRenderer.invoke("createCustomer", data);
   },
@@ -29,6 +31,31 @@ const api = {
 
   deleteCustomer: async(id: number) => {
     return await ipcRenderer.invoke("deleteCustomer", id);
+  },
+
+  // ================ Tax Controller
+  createTax: async(dataTax: TaxInvoiceProps) => {
+    return await ipcRenderer.invoke("createTax", dataTax);
+  },
+
+  getAllTaxes: async() => {
+    return await ipcRenderer.invoke("getAllTaxes");
+  },
+
+  getSearchCustomerTaxes: async(dataTax: string) => {
+    return await ipcRenderer.invoke("getSearchCustomerTaxes", dataTax);
+  },
+
+  updateStatus: async(id: number, tax_status: string) => {
+    return await ipcRenderer.invoke("updateStatus", id, tax_status);
+  },
+
+  updateTax: async(id: number, dataTax: TaxInvoiceProps) => {  
+    return await ipcRenderer.invoke("updateTax", id, dataTax);
+  },
+
+  deleteTax: async(id: number) => {
+    return await ipcRenderer.invoke("deleteTax", id);
   }
   
 };

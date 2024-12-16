@@ -53,11 +53,11 @@ export async function getCustomers(){
       return await prisma.customer.findMany();
       
     } catch (error) {
-      console.error(error);
+      throw new Error("Erro ao buscar clientes");
     }
   }
 
-export async function getSearchCustomer(customerName: string | undefined){
+export async function getSearchCustomer(customerName: string){
     try {
       const customers = await prisma.customer.findMany({
         where: customerName
@@ -74,7 +74,6 @@ export async function getSearchCustomer(customerName: string | undefined){
   
       return customers.length ? customers : [];
     } catch (error) {
-      console.error("Erro ao buscar clientes:", error);
       throw new Error("Erro ao buscar clientes");
     }
   }
@@ -104,7 +103,6 @@ export async function updateCustomer(id: number, data: CustomerProps){
       return customerUpdated
 
     } catch (error) {
-      console.error(error);
       throw new Error("Erro ao atualizar o cliente");
     }
   }
@@ -124,7 +122,6 @@ export async function updateCustomer(id: number, data: CustomerProps){
       })
 
     } catch (error) {
-      console.error(error);
-      throw new Error("Erro ao deletar o cliente");
+      throw new Error("Erro ao deletar o cliente",);
     }
   }

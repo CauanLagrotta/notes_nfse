@@ -21,3 +21,12 @@ export interface EditCustomerModalProps{
     
     selectedCustomer: NewCustomerProps | null;
 }
+
+export interface TaxInvoiceProps{
+    id?: number;
+    customerId: number;
+    price: string;
+    service: string;
+    tax_status?: string;
+    issued_date?: Date;
+}

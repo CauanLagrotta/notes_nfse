@@ -1,152 +1,128 @@
-// import { Request, Response } from "express";
-// import { prisma } from "../db/database";
+import { prisma } from "../db/database";
+import { TaxInvoiceProps } from "../types/types";
 
-// export class TaxController {
-//   async createTax(req: Request, res: Response): Promise<Response> {
-//     try {
-//       const { customer_tax_name, price, service } = req.body;
+export async function createTax(dataTax: TaxInvoiceProps) {
+  try {
+    // Verificar se o customerId existe no banco de dados
+    const customer = await prisma.customer.findUnique({
+      where: { id: dataTax.customerId },
+    });
 
-//       if (!customer_tax_name || !price || !service) {
-//         return res.status(400).send({ msg: "Dados incompletos" });
-//       }
+    if (!customer) {
+      throw new Error("Cliente não encontrado.");
+    }
 
-//       const customerExists = await prisma.customer.findUnique({
-//         where: {
-//           customer_name: customer_tax_name,
-//         },
-//       });
+    // Criar uma nova TaxInvoice
+    const newTaxInvoice = await prisma.taxInvoice.create({
+      data: {
+        customerId: dataTax.customerId,
+        price: dataTax.price,
+        service: dataTax.service,
+        tax_status: dataTax.tax_status || "Pendente", // Valor padrão caso não seja fornecido
+        issued_date: dataTax.issued_date || new Date(), // Data atual como padrão
+      },
+    });
 
-//       if (!customerExists) {
-//         return res.status(404).send({ msg: "Cliente não encontrado" });
-//       }
+    console.log("Nota fiscal criada com sucesso:", newTaxInvoice);
 
-//       const taxInvoice = await prisma.taxInvoice.create({
-//         data: {
-//           customer_tax_name: customerExists.customer_name,
-//           price: parseFloat(price),
-//           service: service.trim(),
-//         },
-//       });
+    // Retornar a nova nota fiscal criada (opcional, dependendo da sua lógica)
+    return newTaxInvoice;
+  } catch (error: any) {
+    console.error("Erro ao criar nota fiscal:", error.message);
 
-//       return res.status(201).send({
-//         msg: "NFS-e cadastrada com sucesso",
-//         taxInvoice,
-//       });
-//     } catch (error) {
-//       console.error("Erro ao criar nota fiscal:", error);
-//       return res.status(500).send({ msg: "Erro interno" });
-//     }
-//   }
+    // Lançar o erro novamente para manipulação posterior
+    throw new Error(error.message);
+  }
+}
 
-//   async getAllTaxes(_: Request, res: Response): Promise<Response> {
-//     try {
-//       const taxes = await prisma.taxInvoice.findMany();
-//       return res.status(200).send(taxes);
-//     } catch (error) {
-//       console.error(error);
-//       return res.status(500).send({ msg: "Erro interno" });
-//     }
-//   }
+export async function getAllTaxes() {
+  try {
+    const taxes = await prisma.taxInvoice.findMany({
+      include: {
+        customer: true,
+      },
+    });
+    return taxes;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Erro ao buscar NFS-e");
+  }
+}
 
-//   async getSearchCustomerTaxes(req: Request, res: Response): Promise<Response> {
-//     try {
-//       const customerName = req.query.customer_name
-//         ? (req.query.customer_name as string)
-//         : "";
-  
-//       if (!customerName) {
-//         return res.status(400).json({ msg: "O nome do cliente é obrigatório" });
-//       }
-  
-//       const invoices = await prisma.taxInvoice.findMany({
-//         where: {
-//           customer: {
-//             customer_name: {
-//               contains: customerName.toLowerCase(),
-//             },
-//           },
-//         },
-//         orderBy: {
-//           customer: {
-//             customer_name: "asc",
-//           },
-//         },
-//         include: {
-//           customer: true,
-//         },
-//       });
-  
-//       if (invoices.length === 0) {
-//         return res
-//           .status(404)
-//           .json({ msg: "Nenhuma NFS-e encontrada para esse cliente" });
-//       }
-  
-//       return res.status(200).json({ invoices });
-//     } catch (error) {
-//       console.error(error);
-//       return res.status(500).send({ msg: "Erro interno" });
-//     }
-//   }
-  
+export async function getSearchCustomerTaxes(customerName: string) {
+  try {
+    const customers = await prisma.customer.findMany({
+      where: {
+        customer_name: {
+          contains: customerName.toLowerCase(),
+        },
+      },
+      include: {
+        taxInvoices: true,
+      },
+      orderBy: {
+        customer_name: "asc",
+      },
+    });
 
-//   async updateStatus(req: Request, res: Response): Promise<Response> {
-//     try {
-//       const { id } = req.params;
-//       const { tax_status } = req.body;
+    if (!customerName) {
+      console.log(!customerName);
+      throw new Error("Nenhum cliente encontrado");
+    }
 
-//       const taxInvoice = await prisma.taxInvoice.update({
-//         where: {
-//           id: Number(id),
-//         },
-//         data: {
-//           tax_status: tax_status,
-//         },
-//       });
+    console.log(customers);
+    return customers.length ? customers : [];
+  } catch (error) {
+    console.log(error);
+    throw new Error("Erro ao buscar clientes");
+  }
+}
 
-//       return res
-//         .status(200)
-//         .json({ msg: "Status atualizado com sucesso", taxInvoice });
-//     } catch (error) {
-//       console.error(error);
-//       return res.status(500).send({ msg: "Erro interno" });
-//     }
-//   }
+export async function updateStatus(id: number, tax_status: string) {
+  try {
+    const taxInvoice = await prisma.taxInvoice.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        tax_status: tax_status,
+      },
+    });
 
-//   async updateTax(req: Request, res: Response): Promise<Response> {
-//     try {
-//       const { id } = req.params;
-//       const { price, service } = req.body;
+    console.log(taxInvoice);
+    return taxInvoice;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Erro ao atualizar o status");
+  }
+}
 
-//       const taxInvoice = await prisma.taxInvoice.update({
-//         where: {
-//           id: Number(id),
-//         },
-//         data: {
-//           price: parseFloat(price),
-//           service: service.trim(),
-//         },
-//       });
+export async function updateTax(id: number, dataTax: TaxInvoiceProps) {
+  try {
+    const taxUpdated = await prisma.taxInvoice.update({
+      where: { id },
+      data: {
+        customerId: dataTax.customerId as number,
+        price: dataTax.price as string,
+        service: dataTax.service as string,
+        issued_date: dataTax.issued_date as Date,
+      },
+    });
 
-//       return res
-//         .status(200)
-//         .json({ msg: "NFS-e atualizada com sucesso", taxInvoice });
-//     } catch (error) {
-//       console.error(error);
-//       return res.status(500).send({ msg: "Erro interno" });
-//     }
-//   }
+    console.log(taxUpdated);
+    return taxUpdated;
+  } catch (error) {
+    throw new Error("Erro ao atualizar NFS-e");
+  }
+}
 
-//   async deleteTax(req: Request, res: Response): Promise<Response> {
-//     try {
-//       const { id } = req.params;
-//       await prisma.taxInvoice.delete({
-//         where: { id: Number(id) },
-//       });
-//       return res.status(200).json({ msg: "NFS-e deletada com sucesso" });
-//     } catch (error) {
-//       console.error(error);
-//       return res.status(500).send({ msg: "Erro interno" });
-//     }
-//   }
-// }
+export async function deleteTax(id: number) {
+  try {
+    await prisma.taxInvoice.delete({
+      where: { id },
+    });
+  } catch (error) {
+    console.log(error);
+    throw new Error("Erro ao deletar NFS-e");
+  }
+}
