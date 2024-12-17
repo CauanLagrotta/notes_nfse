@@ -6,7 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FixedSizeList as List } from "react-window";
+import { FixedSizeList as List } from "react-window"; // Importando o componente FixedSizeList do react-window para criar uma lista com dimensões fixas
 
 export function AllCustomers() {
   const [customers, setCustomers] = useState<NewCustomerProps[]>([]);
@@ -17,6 +17,7 @@ export function AllCustomers() {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Função para abrir o modal de edição
   const openEditCustomerModal = (customer: NewCustomerProps) => {
     setSelectedCustomer(customer);
     setIsEditCustomerModalOpen(true);
@@ -28,6 +29,8 @@ export function AllCustomers() {
     });
   }
 
+
+  // Função para pesquisar clientes
   const handleSearch = async (query: string) => {
     setLoading(true);
 
@@ -50,25 +53,30 @@ export function AllCustomers() {
     }
   };
 
+  // Função para fechar o modal de edição
   const closeEditCustomerModal = () => {
     setIsEditCustomerModalOpen(false);
   };
 
+
+  // Função para editar um cliente
   const handleEditCustomer = (customer: NewCustomerProps) => {
     setSelectedCustomer(customer);
     setIsEditCustomerModalOpen(true);
     getAllCustomers();
   };
 
+
+  // Função para excluir um cliente
   const handleDeleteCustomer = async (id: number) => {
     await window.api.deleteCustomer(id);
     setCustomers(customers.filter((customer) => customer.id !== id));
   };
 
   useEffect(() => {
-    getAllCustomers();
+    getAllCustomers(); // Carrega os clientes ao montar o componente
 
-    const timeout = setTimeout(() => {
+    const timeout = setTimeout(() => { // Executa a busca de clientes a cada 500ms
       handleSearch(searchQuery);
     }, 500);
 
@@ -80,7 +88,7 @@ export function AllCustomers() {
 
     return (
       <div style={style} className="flex items-center border-t border-gray-200">
-        
+        {/* Renderiza os dados do cliente */}
         <div className="flex-1 py-3 px-4">{customer.customer_name}</div>
         <div className="flex-1 py-3 px-4">{customer.customer_email}</div>
         <div className="flex-1 py-3 px-4">{customer.customer_phone}</div>
@@ -132,7 +140,7 @@ export function AllCustomers() {
         </div>
       </div>
 
-      <EditCustomerModal
+      <EditCustomerModal // Modal de edição
         isOpen={isEditCustomerModalOpen}
         onClose={closeEditCustomerModal}
         onEditCustomer={handleEditCustomer}
