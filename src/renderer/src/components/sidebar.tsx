@@ -7,7 +7,7 @@ import AssignmentLateIcon from "@mui/icons-material/AssignmentLate";
 
 export function Sidebar() {
   return (
-    <div className="bg-[#000] min-h-screen w-72 p-4 flex flex-col justify-center items-center">
+    <div className="bg-[#000] min-h-screen w-72 p-4 flex flex-col fixed">
       <h1 className="text-3xl text-[#fff] font-bold mb-6">Storage</h1>
 
       <nav className="flex flex-col gap-6 mt-5 text-xl h-full w-full">

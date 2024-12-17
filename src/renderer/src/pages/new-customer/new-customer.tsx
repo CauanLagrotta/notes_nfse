@@ -56,7 +56,7 @@ export function NewCustomer() {
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-8 pl-80">
         <Formik
           initialValues={{
             customer_name: "",

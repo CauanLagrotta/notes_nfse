@@ -77,7 +77,7 @@ export function NewTaxInvoice() {
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
-      <div className="flex flex-col w-full p-6 bg-white shadow-md rounded-md">
+      <div className="flex flex-col w-full p-6 bg-white shadow-md rounded-md pl-80">
         <h1 className="text-3xl font-semibold mb-6 text-gray-800">
           Nova Nota Fiscal
         </h1>
@@ -98,7 +98,7 @@ export function NewTaxInvoice() {
             />
             <button
               onClick={handleSearch}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+              className="bg-cyan-950 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
             >
               Pesquisar
             </button>
@@ -188,6 +188,22 @@ export function NewTaxInvoice() {
                 type="text"
                 id="customerAddress"
                 value={selectedCustomer?.customer_address || ""}
+                readOnly
+                className="border border-gray-300 rounded-lg p-3 w-full bg-gray-200"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="customerCpf"
+                className="block text-sm font-medium"
+              >
+                CPF/CNPJ
+              </label>
+              <input
+                type="text"
+                id="customerCpf"
+                value={selectedCustomer?.customer_cpf || ""}
                 readOnly
                 className="border border-gray-300 rounded-lg p-3 w-full bg-gray-200"
               />

@@ -111,7 +111,7 @@ export function AllCustomers() {
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-8 pl-80">
         <h1 className="text-3xl font-semibold text-gray-800 mb-6">
           Todos os clientes
         </h1>

@@ -25,12 +25,10 @@ export async function createTax(dataTax: TaxInvoiceProps) {
 
     console.log("Nota fiscal criada com sucesso:", newTaxInvoice);
 
-    // Retornar a nova nota fiscal criada (opcional, dependendo da sua lógica)
     return newTaxInvoice;
   } catch (error: any) {
     console.error("Erro ao criar nota fiscal:", error.message);
 
-    // Lançar o erro novamente para manipulação posterior
     throw new Error(error.message);
   }
 }
