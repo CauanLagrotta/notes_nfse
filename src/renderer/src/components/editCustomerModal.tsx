@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { EditCustomerModalProps } from "@/types/types";
-import { NewCustomerProps } from "@/types/types";
+import { EditCustomerModalProps, NewCustomerProps } from "../types/types";
 import InputMask from "react-input-mask";
 
 export function EditCustomerModal({

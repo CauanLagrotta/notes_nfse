@@ -98,13 +98,13 @@ export function NewTaxInvoice() {
             />
             <button
               onClick={handleSearch}
-              className="bg-cyan-950 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+              className="bg-cyan-900 text-white px-6 py-3 rounded-lg hover:bg-cyan-950 transition"
             >
               Pesquisar
             </button>
           </div>
 
-          {/* Lista de clientes */}
+          {/* Lista de clientes na barra de pesquisa */}
           {customers.length > 0 && (
             <ul className="mt-4 border border-gray-200 rounded-lg divide-y divide-gray-200 bg-white">
               {customers.map((customer) => (
@@ -256,7 +256,7 @@ export function NewTaxInvoice() {
 
           <button
             type="submit"
-            className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition"
+            className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition"
           >
             Salvar
           </button>

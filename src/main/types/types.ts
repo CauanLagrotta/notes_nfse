@@ -8,9 +8,14 @@ export interface CustomerProps {
 }
 
 export interface TaxInvoiceProps {
+  id?: number;
   customerId: number;
   price: string;
   service: string;
   tax_status?: string;
   issued_date?: Date;
+}
+
+export interface CustomerInvoiceProps extends TaxInvoiceProps {
+  customer_name: string;
 }

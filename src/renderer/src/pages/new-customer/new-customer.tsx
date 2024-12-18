@@ -218,7 +218,7 @@ export function NewCustomer() {
               </div>
               <button
                 type="submit"
-                className="w-full mt-6 bg-zinc-800 text-white py-2 px-4 rounded-md hover:bg-black transition-colors duration-300 focus:outline-none focus:ring focus:ring-gray-700"
+                className="w-full mt-6 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors duration-300 focus:outline-none focus:ring focus:ring-gray-700"
               >
                 Salvar
               </button>

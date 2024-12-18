@@ -29,7 +29,6 @@ export function AllCustomers() {
     });
   }
 
-
   // Função para pesquisar clientes
   const handleSearch = async (query: string) => {
     setLoading(true);
@@ -71,6 +70,17 @@ export function AllCustomers() {
   const handleDeleteCustomer = async (id: number) => {
     await window.api.deleteCustomer(id);
     setCustomers(customers.filter((customer) => customer.id !== id));
+
+    toast.success("Cliente excluído com sucesso!", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
   };
 
   useEffect(() => {

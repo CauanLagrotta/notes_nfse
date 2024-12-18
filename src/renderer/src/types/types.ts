@@ -30,3 +30,22 @@ export interface TaxInvoiceProps{
     tax_status?: string;
     issued_date?: Date;
 }
+
+export interface EditTaxModalProps{
+    isOpen: boolean;
+    onClose: () => void;
+    onEditTax: (tax: {
+        id: number;
+        customerId: number;
+        price: string;
+        service: string;
+        tax_status?: string;
+        issued_date?: Date;
+    }) => void;
+
+    selectedTax: TaxInvoiceProps | null;
+}
+
+export interface CustomerInvoiceProps extends TaxInvoiceProps{
+    customer_name: string;
+}

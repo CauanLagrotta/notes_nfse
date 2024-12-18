@@ -139,37 +139,62 @@ async function createTax(dataTax) {
 async function getAllTaxes() {
   try {
     const taxes = await prisma.taxInvoice.findMany({
+      // Buscar todas as TaxInvoices incluindo o relacionamento com o cliente
       include: {
         customer: true
       }
     });
-    return taxes;
+    const mappedTaxes = taxes.map((tax) => ({
+      // mapeando as taxes para o formata especifico para mostrar no frontend
+      id: tax.id,
+      customerId: tax.customerId,
+      price: tax.price,
+      service: tax.service,
+      tax_status: tax.tax_status,
+      issued_date: tax.issued_date,
+      customer_name: tax.customer.customer_name
+    }));
+    return mappedTaxes;
   } catch (error) {
     console.log(error);
     throw new Error("Erro ao buscar NFS-e");
   }
 }
-async function getSearchCustomerTaxes(customerName) {
+async function getSearchCustomerTaxes(customer_name) {
   try {
     const customers = await prisma.customer.findMany({
       where: {
         customer_name: {
-          contains: customerName.toLowerCase()
+          contains: customer_name.toLowerCase()
         }
       },
       include: {
         taxInvoices: true
+        // incluindo nfs-e de cada cliente
       },
       orderBy: {
         customer_name: "asc"
       }
     });
-    if (!customerName) {
-      console.log(!customerName);
+    if (!customers.length) {
+      throw new Error("Nenhum cliente encontrado");
+    }
+    const taxes = customers.flatMap(
+      (customer) => customer.taxInvoices.map((tax) => ({
+        id: tax.id,
+        customer_name: customer.customer_name,
+        price: tax.price,
+        service: tax.service,
+        tax_status: tax.tax_status,
+        issued_date: tax.issued_date
+      }))
+    );
+    if (!customer_name) {
+      console.log(!customer_name);
       throw new Error("Nenhum cliente encontrado");
     }
     console.log(customers);
-    return customers.length ? customers : [];
+    return taxes;
   } catch (error) {
     console.log(error);
     throw new Error("Erro ao buscar clientes");
