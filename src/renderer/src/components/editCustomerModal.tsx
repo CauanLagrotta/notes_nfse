@@ -63,7 +63,7 @@ export function EditCustomerModal({
               onChange={(e) =>
                 setEditValues({ ...editValues, customer_name: e.target.value })
               }
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring focus:ring-blue-200"
             />
           </div>
           <div className="mb-4">
@@ -80,7 +80,7 @@ export function EditCustomerModal({
               onChange={(e) =>
                 setEditValues({ ...editValues, customer_email: e.target.value })
               }
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring focus:ring-blue-200"
             />
           </div>
           <div className="mb-4">
@@ -96,7 +96,7 @@ export function EditCustomerModal({
               onChange={(e) =>
                 setEditValues({ ...editValues, customer_phone: e.target.value })
               }
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring focus:ring-blue-200"
             />
           </div>
           <div className="mb-4">
@@ -117,7 +117,7 @@ export function EditCustomerModal({
                   customer_address: e.target.value,
                 })
               }
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring focus:ring-blue-200"
             />
           </div>
           <div className="mb-4">
@@ -135,7 +135,7 @@ export function EditCustomerModal({
               onChange={(e) =>
                 setSelectedDocument(e.target.value as "CPF" | "CNPJ")
               }
-              className="w-full mt-1 p-2 border rounded-md focus:ring focus:ring-blue-200"
+              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
             >
               <option value="CPF">CPF</option>
               <option value="CNPJ">CNPJ</option>
@@ -148,7 +148,7 @@ export function EditCustomerModal({
                 setEditValues({ ...editValues, customer_cpf: e.target.value })
               }
               placeholder={selectedDocument === "CPF" ? "CPF" : "CNPJ"}
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring focus:ring-blue-200"
             />
           </div>
           <div className="flex justify-end">

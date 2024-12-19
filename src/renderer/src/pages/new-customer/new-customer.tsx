@@ -79,14 +79,14 @@ export function NewCustomer() {
                     htmlFor="customer_name"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Nome
+                    Nome*
                   </label>
                   <Field
                     name="customer_name"
                     type="text"
                     id="customer_name"
                     placeholder="Nome"
-                    className="w-full mt-1 p-2 border rounded-md focus:ring focus:ring-blue-200"
+                    className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
                   />
                   {errors.customer_name && touched.customer_name && (
                     <span className="text-sm text-red-500">
@@ -107,7 +107,7 @@ export function NewCustomer() {
                     type="email"
                     id="customer_email"
                     placeholder="Email"
-                    className="w-full mt-1 p-2 border rounded-md focus:ring focus:ring-blue-200"
+                    className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
                   />
                   {errors.customer_email && touched.customer_email && (
                     <span className="text-sm text-red-500">
@@ -121,7 +121,7 @@ export function NewCustomer() {
                     htmlFor="customer_phone"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Telefone
+                    Telefone*
                   </label>
                   <Field name="customer_phone">
                     {({ field }: FieldProps) => (
@@ -130,7 +130,7 @@ export function NewCustomer() {
                         mask="(99) 99999-9999"
                         id="customer_phone"
                         placeholder="Telefone"
-                        className="w-full mt-1 p-2 border rounded-md focus:ring focus:ring-blue-200"
+                        className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
                       />
                     )}
                   </Field>
@@ -146,14 +146,14 @@ export function NewCustomer() {
                     htmlFor="customer_address"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Endereço
+                    Endereço*
                   </label>
                   <Field
                     name="customer_address"
                     type="text"
                     id="customer_address"
                     placeholder="Endereço"
-                    className="w-full mt-1 p-2 border rounded-md focus:ring focus:ring-blue-200"
+                    className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
                   />
                   {errors.customer_address && touched.customer_address && (
                     <span className="text-sm text-red-500">
@@ -167,7 +167,7 @@ export function NewCustomer() {
                     htmlFor="documentType"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Documento
+                    Documento*
                   </label>
                   <select
                     id="documentType"
@@ -176,7 +176,7 @@ export function NewCustomer() {
                     onChange={(e) =>
                       setSelectedDocument(e.target.value as "CPF" | "CNPJ")
                     }
-                    className="w-full mt-1 p-2 border rounded-md focus:ring focus:ring-blue-200"
+                    className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
                   >
                     <option value="CPF">CPF</option>
                     <option value="CNPJ">CNPJ</option>
@@ -204,7 +204,7 @@ export function NewCustomer() {
                           placeholder={
                             selectedDocument === "CPF" ? "CPF" : "CNPJ"
                           }
-                          className="w-full mt-1 p-2 border rounded-md focus:ring focus:ring-blue-200"
+                          className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
                         />
                       );
                     }}

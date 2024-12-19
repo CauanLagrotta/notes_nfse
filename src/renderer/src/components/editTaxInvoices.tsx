@@ -14,6 +14,8 @@ export function EditTaxInvoices({
     issued_date: new Date(),
   });
 
+  const [error, setError] = useState("");
+
   useEffect(() => {
     if (selectedTax) {
       setEditValues({
@@ -26,6 +28,13 @@ export function EditTaxInvoices({
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputDate = new Date(e.target.value);
+
+    if(isNaN(inputDate.getTime())) {
+      setError("Data inválida");
+      return;
+    }
+
+    setError("");
     setEditValues({
       ...editValues,
       issued_date: new Date(
@@ -73,7 +82,7 @@ export function EditTaxInvoices({
               decimalSeparator=","
               groupSeparator="."
               allowNegativeValue={false}
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring focus:ring-blue-200"
             />
           </div>
 
@@ -92,7 +101,7 @@ export function EditTaxInvoices({
               onChange={(e) =>
                 setEditValues({ ...editValues, service: e.target.value })
               }
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring focus:ring-blue-200"
             />
           </div>
 
@@ -116,8 +125,9 @@ export function EditTaxInvoices({
                   .split("T")[0]
               }
               onChange={handleDateChange}
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              className={`mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring focus:ring-blue-200 ${error ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-blue-200"}`}
             />
+            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
           </div>
 
           <div className="flex justify-end">

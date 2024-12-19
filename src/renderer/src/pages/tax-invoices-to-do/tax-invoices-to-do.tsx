@@ -28,6 +28,9 @@ export function TaxInvoicesToDo() {
 
   const handleDeleteTax = async (id: number) => {
     try {
+      if (!window.confirm("Tem certeza que deseja excluir a NFS-e?")) {
+        return;
+      }
       await window.api.deleteTax(id);
       toast.success("NFS-e excluída com sucesso!", {
         position: "top-right",
@@ -97,7 +100,9 @@ export function TaxInvoicesToDo() {
     }
     try {
       const result = await window.api.getSearchCustomerTaxes(searchTerm);
-      const filteredResult = result.filter((item : CustomerInvoiceProps) => item.tax_status === "Pendente");
+      const filteredResult = result.filter(
+        (item: CustomerInvoiceProps) => item.tax_status === "Pendente",
+      );
 
       setInvoices(filteredResult);
     } catch (error) {
@@ -139,13 +144,13 @@ export function TaxInvoicesToDo() {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
-  
+
       <div className="flex flex-col w-full p-8 pl-80">
         {/* Título */}
         <h1 className="text-4xl font-bold text-gray-800 mb-6">
           NFS-e Não Emitidas
         </h1>
-  
+
         {/* Campo de busca */}
         <div className="bg-white p-6 shadow rounded-lg mb-8">
           <h2 className="text-xl font-semibold text-gray-700 mb-4">
@@ -158,7 +163,7 @@ export function TaxInvoicesToDo() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Digite o nome do cliente ou serviço"
-              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring focus:ring-cyan-500"
+              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring focus:ring-cyan-700"
             />
             <button
               onClick={handleSearch}
@@ -168,7 +173,7 @@ export function TaxInvoicesToDo() {
             </button>
           </div>
         </div>
-  
+
         {/* Lista de NFS-e */}
         {invoices.length > 0 ? (
           <div className="grid grid-cols-2 gap-6">
@@ -183,16 +188,19 @@ export function TaxInvoicesToDo() {
                   </h3>
 
                   <p className="text-gray-600">
-                    <span className="font-medium">Cliente:</span> {taxInvoice.customer_name}
+                    <span className="font-medium">Cliente:</span>{" "}
+                    {taxInvoice.customer_name}
                   </p>
                   <p className="text-gray-600">
-                    <span className="font-medium">Serviço:</span> {taxInvoice.service}
+                    <span className="font-medium">Serviço:</span>{" "}
+                    {taxInvoice.service}
                   </p>
                   <p className="text-gray-600">
-                    <span className="font-medium">Valor:</span> R${taxInvoice.price}
+                    <span className="font-medium">Valor:</span> R$
+                    {taxInvoice.price}
                   </p>
                   <p className="text-gray-600">
-                    <span className="font-medium">Emitido em:</span>
+                    <span className="font-medium">Emitido em: </span>
                     {taxInvoice.issued_date?.toLocaleDateString()}
                   </p>
                   <p
@@ -205,7 +213,7 @@ export function TaxInvoicesToDo() {
                     Status: {taxInvoice.tax_status}
                   </p>
                 </div>
-  
+
                 {/* Ações */}
                 <div className="flex items-center gap-4 mt-4">
                   <button
@@ -243,16 +251,15 @@ export function TaxInvoicesToDo() {
           </p>
         )}
       </div>
-  
+
       <EditTaxInvoices
         isOpen={isEditTaxModalOpen}
         onClose={() => setIsEditTaxModalOpen(false)}
         onEditTax={handleEditTax as CustomerInvoiceProps | any}
         selectedTax={selectedInvoice}
       />
-  
+
       <ToastContainer />
     </div>
   );
-  
 }

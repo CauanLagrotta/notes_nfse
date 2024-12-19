@@ -62,7 +62,7 @@ export function AllCustomers() {
   const handleDeleteCustomer = async (id: number) => {
     if (
       !window.confirm(
-        "Tem certeza que deseja excluir o cliente? Todas as NFS-e vinculadas ao cliente serão excluídas."
+        "Tem certeza que deseja excluir o cliente? Todas as NFS-e vinculadas ao cliente serão excluídas.",
       )
     ) {
       return;
@@ -100,7 +100,7 @@ export function AllCustomers() {
             placeholder="Buscar cliente..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-700"
           />
           <button
             onClick={handleSearch}

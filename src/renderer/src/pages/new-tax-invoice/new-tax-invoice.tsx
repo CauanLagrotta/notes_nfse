@@ -94,7 +94,7 @@ export function NewTaxInvoice() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Digite o nome do cliente"
-              className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring focus:ring-blue-200"
+              className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring focus:ring-cyan-700"
             />
             <button
               onClick={handleSearch}

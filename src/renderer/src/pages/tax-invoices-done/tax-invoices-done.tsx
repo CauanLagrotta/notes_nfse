@@ -28,6 +28,8 @@ export function TaxInvoicesDone() {
 
   const handleDeleteTax = async (id: number) => {
     try {
+      if(!window.confirm("Tem certeza que deseja excluir a NFS-e?")){return}
+
       await window.api.deleteTax(id);
       toast.success("NFS-e excluída com sucesso!", {
         position: "top-right",
@@ -161,7 +163,7 @@ export function TaxInvoicesDone() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Digite o nome do cliente ou serviço"
-              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring focus:ring-cyan-500"
+              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring focus:ring-cyan-700"
             />
             <button
               onClick={handleSearch}
@@ -198,7 +200,7 @@ export function TaxInvoicesDone() {
                     {taxInvoice.price}
                   </p>
                   <p className="text-gray-600">
-                    <span className="font-medium">Emitido em:</span>
+                    <span className="font-medium">Emitido em: </span>
                     {taxInvoice.issued_date?.toLocaleDateString()}
                   </p>
                   <p
