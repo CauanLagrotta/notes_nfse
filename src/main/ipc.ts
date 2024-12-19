@@ -6,10 +6,12 @@ import {
   updateCustomer,
   deleteCustomer,
 } from "./controllers/customerController";
+
 import {
   createTax,
   deleteTax,
-  getAllTaxes,
+  getAllDoneTaxes,
+  getAllToDoTaxes,
   getSearchCustomerTaxes,
   updateTax,
   updateStatus,
@@ -47,8 +49,12 @@ ipcMain.handle("createTax", async (_, dataTax: TaxInvoiceProps) => {
   return await createTax(dataTax);
 });
 
-ipcMain.handle("getAllTaxes", async () => {
-  return await getAllTaxes();
+ipcMain.handle("getAllDoneTaxes", async () => {
+  return await getAllDoneTaxes();
+});
+
+ipcMain.handle("getAllToDoTaxes", async () => {
+  return await getAllToDoTaxes();
 });
 
 ipcMain.handle("getSearchCustomerTaxes", async (_, dataTax: string) => {

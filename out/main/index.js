@@ -97,16 +97,11 @@ async function updateCustomer(id, data) {
 }
 async function deleteCustomer(id) {
   try {
-    const customerExists = await prisma.customer.findUnique({
-      where: { id }
-    });
-    if (!customerExists) {
-      throw new Error("Cliente nao encontrado");
-    }
     await prisma.customer.delete({
       where: { id }
     });
   } catch (error) {
+    console.log(error);
     throw new Error("Erro ao deletar o cliente");
   }
 }
@@ -136,10 +131,36 @@ async function createTax(dataTax) {
     throw new Error(error.message);
   }
 }
-async function getAllTaxes() {
+async function getAllDoneTaxes() {
   try {
     const taxes = await prisma.taxInvoice.findMany({
-      // Buscar todas as TaxInvoices incluindo o relacionamento com o cliente
+      where: { tax_status: "Concluído" },
+      // Buscar todas as TaxInvoices com o status "Concluído" incluindo o relacionamento com o cliente
+      include: {
+        customer: true
+      }
+    });
+    const mappedTaxes = taxes.map((tax) => ({
+      // mapeando as taxes para o formata especifico para mostrar no frontend
+      id: tax.id,
+      customerId: tax.customerId,
+      price: tax.price,
+      service: tax.service,
+      tax_status: tax.tax_status,
+      issued_date: tax.issued_date,
+      customer_name: tax.customer.customer_name
+    }));
+    return mappedTaxes;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Erro ao buscar NFS-e");
+  }
+}
+async function getAllToDoTaxes() {
+  try {
+    const taxes = await prisma.taxInvoice.findMany({
+      where: { tax_status: "Pendente" },
+      // Buscar todas as TaxInvoices com o status "Pendente" incluindo o relacionamento com o cliente
       include: {
         customer: true
       }
@@ -265,8 +286,11 @@ electron.ipcMain.handle("createTax", async (_, dataTax) => {
   console.log("dados recebidos: ", dataTax);
   return await createTax(dataTax);
 });
-electron.ipcMain.handle("getAllTaxes", async () => {
-  return await getAllTaxes();
+electron.ipcMain.handle("getAllDoneTaxes", async () => {
+  return await getAllDoneTaxes();
+});
+electron.ipcMain.handle("getAllToDoTaxes", async () => {
+  return await getAllToDoTaxes();
 });
 electron.ipcMain.handle("getSearchCustomerTaxes", async (_, dataTax) => {
   return await getSearchCustomerTaxes(dataTax);

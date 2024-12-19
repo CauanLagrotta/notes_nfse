@@ -23,7 +23,7 @@ export function TaxInvoicesToDo() {
   const handleEditTax = async (invoices: CustomerInvoiceProps) => {
     setSelectedInvoice(invoices);
     setIsEditTaxModalOpen(true);
-    getAllTaxes();
+    getAllToDoTaxes();
   };
 
   const handleDeleteTax = async (id: number) => {
@@ -39,7 +39,7 @@ export function TaxInvoicesToDo() {
         progress: undefined,
         theme: "colored",
       });
-      getAllTaxes();
+      getAllToDoTaxes();
     } catch (error) {
       console.error("Erro ao excluir NFS-e:", error);
       toast.error("Erro ao excluir NFS-e.", {
@@ -55,9 +55,9 @@ export function TaxInvoicesToDo() {
     }
   };
 
-  const getAllTaxes = async () => {
+  const getAllToDoTaxes = async () => {
     try {
-      const result = await window.api.getAllTaxes();
+      const result = await window.api.getAllToDoTaxes();
       console.log("result: ", result);
 
       const combinedData: CustomerInvoiceProps[] = result.map(
@@ -66,7 +66,7 @@ export function TaxInvoicesToDo() {
           customer_name: item.customer_name,
           price: item.price,
           service: item.service,
-          tax_status: item.tax_status || "Pendente",
+          tax_status: item.tax_status && "Pendente",
           issued_date: item.issued_date
             ? new Date(item.issued_date)
             : new Date(),
@@ -92,12 +92,14 @@ export function TaxInvoicesToDo() {
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) {
-      getAllTaxes();
+      getAllToDoTaxes();
       return;
     }
     try {
       const result = await window.api.getSearchCustomerTaxes(searchTerm);
-      setInvoices(result);
+      const filteredResult = result.filter((item : CustomerInvoiceProps) => item.tax_status === "Pendente");
+
+      setInvoices(filteredResult);
     } catch (error) {
       console.error("Erro ao buscar clientes:", error);
       toast.error("Erro ao buscar clientes.", {
@@ -118,19 +120,19 @@ export function TaxInvoicesToDo() {
 
     try {
       await window.api.updateStatus(id, next_status);
-      getAllTaxes();
+      getAllToDoTaxes();
     } catch (error) {
       throw new Error("Erro ao atualizar o status");
     }
   };
 
   useEffect(() => {
-    getAllTaxes();
+    getAllToDoTaxes();
   }, []);
 
   useEffect(() => {
     if (!searchTerm.trim()) {
-      getAllTaxes();
+      getAllToDoTaxes();
     }
   }, [searchTerm]);
 
@@ -190,7 +192,7 @@ export function TaxInvoicesToDo() {
                     <span className="font-medium">Valor:</span> R${taxInvoice.price}
                   </p>
                   <p className="text-gray-600">
-                    <span className="font-medium">Emitido em:</span>{" "}
+                    <span className="font-medium">Emitido em:</span>
                     {taxInvoice.issued_date?.toLocaleDateString()}
                   </p>
                   <p

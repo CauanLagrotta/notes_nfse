@@ -33,9 +33,38 @@ export async function createTax(dataTax: TaxInvoiceProps) {
   }
 }
 
-export async function getAllTaxes(): Promise<CustomerInvoiceProps[]> {
+export async function getAllDoneTaxes(): Promise<CustomerInvoiceProps[]> {
   try {
-    const taxes = await prisma.taxInvoice.findMany({ // Buscar todas as TaxInvoices incluindo o relacionamento com o cliente
+    const taxes = await prisma.taxInvoice.findMany({
+      where: { tax_status: "Concluído" }, // Buscar todas as TaxInvoices com o status "Concluído" incluindo o relacionamento com o cliente
+      include: {
+        customer: true,
+      }
+    });
+
+    const mappedTaxes: CustomerInvoiceProps[] = taxes.map((tax) => ({ // mapeando as taxes para o formata especifico para mostrar no frontend
+
+      id: tax.id,
+      customerId: tax.customerId,
+      price: tax.price,
+      service: tax.service,
+      tax_status: tax.tax_status,
+      issued_date: tax.issued_date,
+      customer_name: tax.customer.customer_name,
+    }))
+
+    return mappedTaxes;
+
+  } catch (error) {
+    console.log(error);
+    throw new Error("Erro ao buscar NFS-e");
+  }
+}
+
+export async function getAllToDoTaxes(): Promise<CustomerInvoiceProps[]> {
+  try {
+    const taxes = await prisma.taxInvoice.findMany({
+      where: { tax_status: "Pendente" }, // Buscar todas as TaxInvoices com o status "Pendente" incluindo o relacionamento com o cliente
       include: {
         customer: true,
       }

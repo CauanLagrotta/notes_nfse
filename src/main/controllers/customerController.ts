@@ -109,19 +109,12 @@ export async function updateCustomer(id: number, data: CustomerProps){
 
   export async function deleteCustomer(id: number){
     try {
-      const customerExists = await prisma.customer.findUnique({
-        where: { id },
-      });
-
-      if (!customerExists) {
-        throw new Error("Cliente nao encontrado");
-      }
-
       await prisma.customer.delete({
         where: { id },
       })
 
     } catch (error) {
+      console.log(error);
       throw new Error("Erro ao deletar o cliente",);
     }
   }

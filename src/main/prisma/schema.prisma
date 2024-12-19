@@ -26,7 +26,7 @@ model Customer {
 model TaxInvoice {
   id          Int      @id @default(autoincrement())
   customerId  Int
-  customer    Customer @relation(fields: [customerId], references: [id])
+  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
   price       String
   service     String
   tax_status  String   @default("Pendente")

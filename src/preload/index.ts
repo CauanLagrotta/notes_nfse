@@ -38,8 +38,12 @@ const api = {
     return await ipcRenderer.invoke("createTax", dataTax);
   },
 
-  getAllTaxes: async() => {
-    return await ipcRenderer.invoke("getAllTaxes");
+  getAllDoneTaxes: async() => {
+    return await ipcRenderer.invoke("getAllDoneTaxes");
+  },
+
+  getAllToDoTaxes: async() => {
+    return await ipcRenderer.invoke("getAllToDoTaxes");
   },
 
   getSearchCustomerTaxes: async(dataTax: string) => {

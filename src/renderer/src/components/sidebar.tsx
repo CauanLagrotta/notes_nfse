@@ -8,7 +8,7 @@ import AssignmentLateIcon from "@mui/icons-material/AssignmentLate";
 export function Sidebar() {
   return (
     <div className="bg-[#000] min-h-screen w-72 p-4 flex flex-col fixed">
-      <h1 className="text-3xl text-[#fff] font-bold mb-6">Storage</h1>
+      <h1 className="text-3xl text-[#fff] font-bold mb-6">Notes NFS-e</h1>
 
       <nav className="flex flex-col gap-6 mt-5 text-xl h-full w-full">
         <Link
@@ -20,18 +20,18 @@ export function Sidebar() {
         </Link>
 
         <Link
-          to="/new-tax-invoice"
-          className="text-[#fff] relative group transition-all duration-300 ease-in-out flex items-center justify-between"
-        >
-          <p>Nova NFS-e</p> <NoteAddIcon />
-          <span className="absolute inset-0 rounded border-2 border-transparent group-hover:border-[#fff] group-hover:scale-105 transition-all duration-300 ease-in-out"></span>
-        </Link>
-
-        <Link
           to="/tax-invoices-to-do"
           className="text-[#fff] relative group transition-all duration-300 ease-in-out flex items-center justify-between"
         >
           <p>NFS-e não feitas</p> <AssignmentLateIcon />
+          <span className="absolute inset-0 rounded border-2 border-transparent group-hover:border-[#fff] group-hover:scale-105 transition-all duration-300 ease-in-out"></span>
+        </Link>
+
+        <Link
+          to="/new-tax-invoice"
+          className="text-[#fff] relative group transition-all duration-300 ease-in-out flex items-center justify-between"
+        >
+          <p>Nova NFS-e</p> <NoteAddIcon />
           <span className="absolute inset-0 rounded border-2 border-transparent group-hover:border-[#fff] group-hover:scale-105 transition-all duration-300 ease-in-out"></span>
         </Link>
 

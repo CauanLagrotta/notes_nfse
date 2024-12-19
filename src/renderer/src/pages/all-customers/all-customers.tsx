@@ -6,7 +6,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FixedSizeList as List } from "react-window"; // Importando o componente FixedSizeList do react-window para criar uma lista com dimensões fixas
 
 export function AllCustomers() {
   const [customers, setCustomers] = useState<NewCustomerProps[]>([]);
@@ -14,30 +13,30 @@ export function AllCustomers() {
     useState<boolean>(false);
   const [selectedCustomer, setSelectedCustomer] =
     useState<NewCustomerProps | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // Função para abrir o modal de edição
   const openEditCustomerModal = (customer: NewCustomerProps) => {
     setSelectedCustomer(customer);
     setIsEditCustomerModalOpen(true);
   };
 
-  function getAllCustomers() {
+  const getAllCustomers = () => {
     window.api.getCustomers().then((customers) => {
       setCustomers(customers);
     });
-  }
+  };
 
-  // Função para pesquisar clientes
-  const handleSearch = async (query: string) => {
-    setLoading(true);
-
+  const handleSearch = async () => {
+    if (!searchTerm.trim()) {
+      getAllCustomers();
+      return;
+    }
     try {
-      const results = await window.api.getSearchCustomer(query);
-      setCustomers(results);
+      const result = await window.api.getSearchCustomer(searchTerm);
+      setCustomers(result);
     } catch (error) {
-      toast.error("Erro ao buscar clientes", {
+      console.error("Erro ao buscar clientes:", error);
+      toast.error("Erro ao buscar clientes.", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -47,29 +46,29 @@ export function AllCustomers() {
         progress: undefined,
         theme: "colored",
       });
-    } finally {
-      setLoading(false);
     }
   };
 
-  // Função para fechar o modal de edição
   const closeEditCustomerModal = () => {
     setIsEditCustomerModalOpen(false);
   };
 
-
-  // Função para editar um cliente
   const handleEditCustomer = (customer: NewCustomerProps) => {
     setSelectedCustomer(customer);
     setIsEditCustomerModalOpen(true);
     getAllCustomers();
   };
 
-
-  // Função para excluir um cliente
   const handleDeleteCustomer = async (id: number) => {
+    if (
+      !window.confirm(
+        "Tem certeza que deseja excluir o cliente? Todas as NFS-e vinculadas ao cliente serão excluídas."
+      )
+    ) {
+      return;
+    }
+
     await window.api.deleteCustomer(id);
-    setCustomers(customers.filter((customer) => customer.id !== id));
 
     toast.success("Cliente excluído com sucesso!", {
       position: "top-right",
@@ -81,76 +80,93 @@ export function AllCustomers() {
       progress: undefined,
       theme: "colored",
     });
+
+    getAllCustomers();
   };
 
   useEffect(() => {
-    getAllCustomers(); // Carrega os clientes ao montar o componente
-
-    const timeout = setTimeout(() => { // Executa a busca de clientes a cada 500ms
-      handleSearch(searchQuery);
-    }, 500);
-
-    return () => clearTimeout(timeout);
-  }, [searchQuery]);
-
-  const renderRow = ({ index, style }: { index: number; style: React.CSSProperties }) => {
-    const customer = customers[index];
-
-    return (
-      <div style={style} className="flex items-center border-t border-gray-200">
-        {/* Renderiza os dados do cliente */}
-        <div className="flex-1 py-3 px-4">{customer.customer_name}</div>
-        <div className="flex-1 py-3 px-4">{customer.customer_email}</div>
-        <div className="flex-1 py-3 px-4">{customer.customer_phone}</div>
-        <div className="flex-1 py-3 px-4">{customer.customer_address}</div>
-        <div className="flex-1 py-3 px-4">{customer.customer_cpf}</div>
-        <div className="flex justify-center py-3 px-4">
-          <EditIcon
-            onClick={() => openEditCustomerModal(customer)}
-            className="text-gray-800 cursor-pointer"
-          />
-          <DeleteIcon
-            onClick={() => handleDeleteCustomer(customer.id as number)}
-            className="text-red-500 cursor-pointer ml-2"
-          />
-        </div>
-      </div>
-    );
-  };
+    getAllCustomers();
+  }, [searchTerm]);
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Sidebar />
       <div className="flex-1 p-8 pl-80">
-        <h1 className="text-3xl font-semibold text-gray-800 mb-6">
-          Todos os clientes
-        </h1>
+        <h1 className="text-4xl font-bold text-gray-800 mb-8">Clientes</h1>
 
-        <input
-          type="text"
-          placeholder="Buscar cliente..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="p-2 border border-gray-300 rounded-md mb-4"
-        />
+        <div className="flex items-center space-x-4 mb-6">
+          <input
+            type="text"
+            placeholder="Buscar cliente..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <button
+            onClick={handleSearch}
+            className="bg-cyan-900 hover:bg-cyan-950 text-white font-semibold px-6 py-2 rounded-lg shadow-md transition-all"
+          >
+            Pesquisar
+          </button>
+        </div>
 
-        <div className="overflow-hidden bg-white shadow-md rounded-lg">
-          {loading ? (
-            <div className="text-center py-4">Carregando...</div>
-          ) : (
-            <List
-              height={600}
-              itemCount={customers.length}
-              itemSize={50}
-              width="100%"
-            >
-              {renderRow}
-            </List>
-          )}
+        <div className="overflow-hidden rounded-lg shadow-lg">
+          <table className="w-full text-left bg-white rounded-lg shadow-md">
+            <thead className="bg-cyan-950 text-white text-sm uppercase">
+              <tr>
+                <th className="p-4">Nome</th>
+                <th className="p-4">Telefone</th>
+                <th className="p-4">E-mail</th>
+                <th className="p-4">CPF/CNPJ</th>
+                <th className="p-4">Endereço</th>
+                <th className="p-4 ">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {customers.map((customer) => (
+                <tr
+                  key={customer.id}
+                  className="hover:bg-gray-100 transition-all"
+                >
+                  <td className="p-4 border-t border-gray-200">
+                    {customer.customer_name}
+                  </td>
+                  <td className="p-4 border-t border-gray-200">
+                    {customer.customer_phone}
+                  </td>
+                  <td className="p-4 border-t border-gray-200">
+                    {customer.customer_email}
+                  </td>
+                  <td className="p-4 border-t border-gray-200">
+                    {customer.customer_cpf}
+                  </td>
+                  <td className="p-4 border-t border-gray-200">
+                    {customer.customer_address}
+                  </td>
+                  <td className="p-4 border-t border-gray-200 flex justify-center items-center space-x-2">
+                    <button
+                      onClick={() => openEditCustomerModal(customer)}
+                      className="text-blue-600 hover:text-blue-800"
+                    >
+                      <EditIcon />
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleDeleteCustomer(customer.id as number)
+                      }
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      <DeleteIcon />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <EditCustomerModal // Modal de edição
+      <EditCustomerModal
         isOpen={isEditCustomerModalOpen}
         onClose={closeEditCustomerModal}
         onEditCustomer={handleEditCustomer}

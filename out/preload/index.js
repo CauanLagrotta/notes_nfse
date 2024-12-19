@@ -22,8 +22,11 @@ const api = {
   createTax: async (dataTax) => {
     return await electron.ipcRenderer.invoke("createTax", dataTax);
   },
-  getAllTaxes: async () => {
-    return await electron.ipcRenderer.invoke("getAllTaxes");
+  getAllDoneTaxes: async () => {
+    return await electron.ipcRenderer.invoke("getAllDoneTaxes");
+  },
+  getAllToDoTaxes: async () => {
+    return await electron.ipcRenderer.invoke("getAllToDoTaxes");
   },
   getSearchCustomerTaxes: async (dataTax) => {
     return await electron.ipcRenderer.invoke("getSearchCustomerTaxes", dataTax);
