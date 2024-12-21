@@ -19,3 +19,11 @@ export interface TaxInvoiceProps {
 export interface CustomerInvoiceProps extends TaxInvoiceProps {
   customer_name: string;
 }
+
+export interface PaginationTaxProps {
+  taxes: CustomerInvoiceProps[];
+  totalTaxes: number;
+  page: number;
+  totalPages: number;
+  currentPage: number;
+}

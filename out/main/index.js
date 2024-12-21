@@ -16,11 +16,7 @@ async function createCustomer(data) {
     } = data;
     const userExists = await prisma.customer.findFirst({
       where: {
-        OR: [
-          { customer_name },
-          { customer_cpf },
-          { customer_phone }
-        ]
+        OR: [{ customer_name }, { customer_cpf }, { customer_phone }]
       }
     });
     if (userExists) {
@@ -48,9 +44,24 @@ async function createCustomer(data) {
     throw error;
   }
 }
-async function getCustomers() {
+async function getCustomers(page = 1, limit = 10) {
   try {
-    return await prisma.customer.findMany();
+    const skip = (page - 1) * limit;
+    const customers = await prisma.customer.findMany({
+      skip,
+      take: limit,
+      orderBy: {
+        customer_name: "asc"
+        // ordenar os clientes pelo nome em ordem alfabetica crescente
+      }
+    });
+    const totalCustomers = await prisma.customer.count();
+    return {
+      customers,
+      total: totalCustomers,
+      page,
+      totalPages: Math.ceil(totalCustomers / limit)
+    };
   } catch (error) {
     throw new Error("Erro ao buscar clientes");
   }
@@ -131,39 +142,21 @@ async function createTax(dataTax) {
     throw new Error(error.message);
   }
 }
-async function getAllDoneTaxes() {
+async function getAllDoneTaxes(page = 1, limit = 10) {
   try {
+    const skip = (page - 1) * limit;
     const taxes = await prisma.taxInvoice.findMany({
+      skip,
+      take: limit,
       where: { tax_status: "Concluído" },
       // Buscar todas as TaxInvoices com o status "Concluído" incluindo o relacionamento com o cliente
       include: {
         customer: true
       }
     });
-    const mappedTaxes = taxes.map((tax) => ({
-      // mapeando as taxes para o formata especifico para mostrar no frontend
-      id: tax.id,
-      customerId: tax.customerId,
-      price: tax.price,
-      service: tax.service,
-      tax_status: tax.tax_status,
-      issued_date: tax.issued_date,
-      customer_name: tax.customer.customer_name
-    }));
-    return mappedTaxes;
-  } catch (error) {
-    console.log(error);
-    throw new Error("Erro ao buscar NFS-e");
-  }
-}
-async function getAllToDoTaxes() {
-  try {
-    const taxes = await prisma.taxInvoice.findMany({
-      where: { tax_status: "Pendente" },
-      // Buscar todas as TaxInvoices com o status "Pendente" incluindo o relacionamento com o cliente
-      include: {
-        customer: true
-      }
+    const totalTaxes = await prisma.taxInvoice.count({
+      where: { tax_status: "Concluído" }
+      // Contar todas as TaxInvoices com o status "Concluído"
     });
     const mappedTaxes = taxes.map((tax) => ({
       // mapeando as taxes para o formata especifico para mostrar no frontend
@@ -175,7 +168,49 @@ async function getAllToDoTaxes() {
       issued_date: tax.issued_date,
       customer_name: tax.customer.customer_name
     }));
-    return mappedTaxes;
+    return {
+      taxes: mappedTaxes,
+      totalTaxes,
+      page,
+      totalPages: Math.ceil(totalTaxes / limit)
+    };
+  } catch (error) {
+    console.log(error);
+    throw new Error("Erro ao buscar NFS-e");
+  }
+}
+async function getAllToDoTaxes(page = 1, limit = 10) {
+  try {
+    const skip = (page - 1) * limit;
+    const taxes = await prisma.taxInvoice.findMany({
+      skip,
+      take: limit,
+      where: { tax_status: "Pendente" },
+      // Buscar todas as TaxInvoices com o status "Pendente" incluindo o relacionamento com o cliente
+      include: {
+        customer: true
+      }
+    });
+    const totalTaxes = await prisma.taxInvoice.count({
+      where: { tax_status: "Pendente" }
+      // Contando todos os pendentes
+    });
+    const mappedTaxes = taxes.map((tax) => ({
+      // mapeando as taxes para o formata especifico para mostrar no frontend
+      id: tax.id,
+      customerId: tax.customerId,
+      price: tax.price,
+      service: tax.service,
+      tax_status: tax.tax_status,
+      issued_date: tax.issued_date,
+      customer_name: tax.customer.customer_name
+    }));
+    return {
+      taxes: mappedTaxes,
+      totalTaxes,
+      page,
+      totalPages: Math.ceil(totalTaxes / limit)
+    };
   } catch (error) {
     console.log(error);
     throw new Error("Erro ao buscar NFS-e");
@@ -269,8 +304,8 @@ electron.ipcMain.handle("createCustomer", async (_, data) => {
   console.log("dados recebidos: ", data);
   return await createCustomer(data);
 });
-electron.ipcMain.handle("getCustomers", async () => {
-  return await getCustomers();
+electron.ipcMain.handle("getCustomers", async (_, page, limit) => {
+  return await getCustomers(page, limit);
 });
 electron.ipcMain.handle("getSearchCustomer", async (_, data) => {
   return await getSearchCustomer(data);
@@ -286,11 +321,11 @@ electron.ipcMain.handle("createTax", async (_, dataTax) => {
   console.log("dados recebidos: ", dataTax);
   return await createTax(dataTax);
 });
-electron.ipcMain.handle("getAllDoneTaxes", async () => {
-  return await getAllDoneTaxes();
+electron.ipcMain.handle("getAllDoneTaxes", async (_, page, limit) => {
+  return await getAllDoneTaxes(page, limit);
 });
-electron.ipcMain.handle("getAllToDoTaxes", async () => {
-  return await getAllToDoTaxes();
+electron.ipcMain.handle("getAllToDoTaxes", async (_, page, limit) => {
+  return await getAllToDoTaxes(page, limit);
 });
 electron.ipcMain.handle("getSearchCustomerTaxes", async (_, dataTax) => {
   return await getSearchCustomerTaxes(dataTax);

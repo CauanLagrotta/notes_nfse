@@ -1,5 +1,9 @@
 import { prisma } from "../db/database";
-import { TaxInvoiceProps, CustomerInvoiceProps } from "../types/types";
+import {
+  TaxInvoiceProps,
+  CustomerInvoiceProps,
+  PaginationTaxProps,
+} from "../types/types";
 
 export async function createTax(dataTax: TaxInvoiceProps) {
   try {
@@ -33,16 +37,27 @@ export async function createTax(dataTax: TaxInvoiceProps) {
   }
 }
 
-export async function getAllDoneTaxes(): Promise<CustomerInvoiceProps[]> {
+export async function getAllDoneTaxes(
+  page: number = 1,
+  limit: number = 10,
+): Promise<PaginationTaxProps> {
   try {
+    const skip = (page - 1) * limit;
     const taxes = await prisma.taxInvoice.findMany({
+      skip,
+      take: limit,
       where: { tax_status: "Concluído" }, // Buscar todas as TaxInvoices com o status "Concluído" incluindo o relacionamento com o cliente
       include: {
         customer: true,
-      }
+      },
     });
 
-    const mappedTaxes: CustomerInvoiceProps[] = taxes.map((tax) => ({ // mapeando as taxes para o formata especifico para mostrar no frontend
+    const totalTaxes = await prisma.taxInvoice.count({
+      where: { tax_status: "Concluído" }, // Contar todas as TaxInvoices com o status "Concluído"
+    });
+
+    const mappedTaxes = taxes.map((tax) => ({
+      // mapeando as taxes para o formata especifico para mostrar no frontend
 
       id: tax.id,
       customerId: tax.customerId,
@@ -51,26 +66,41 @@ export async function getAllDoneTaxes(): Promise<CustomerInvoiceProps[]> {
       tax_status: tax.tax_status,
       issued_date: tax.issued_date,
       customer_name: tax.customer.customer_name,
-    }))
+    }));
 
-    return mappedTaxes;
-
+    return {
+      taxes: mappedTaxes,
+      totalTaxes,
+      page,
+      totalPages: Math.ceil(totalTaxes / limit),
+    } as PaginationTaxProps;
   } catch (error) {
     console.log(error);
     throw new Error("Erro ao buscar NFS-e");
   }
 }
 
-export async function getAllToDoTaxes(): Promise<CustomerInvoiceProps[]> {
+export async function getAllToDoTaxes(
+  page: number = 1,
+  limit: number = 10,
+): Promise<PaginationTaxProps> {
   try {
+    const skip = (page - 1) * limit;
     const taxes = await prisma.taxInvoice.findMany({
+      skip,
+      take: limit,
       where: { tax_status: "Pendente" }, // Buscar todas as TaxInvoices com o status "Pendente" incluindo o relacionamento com o cliente
       include: {
         customer: true,
-      }
+      },
     });
 
-    const mappedTaxes: CustomerInvoiceProps[] = taxes.map((tax) => ({ // mapeando as taxes para o formata especifico para mostrar no frontend
+    const totalTaxes = await prisma.taxInvoice.count({
+      where: { tax_status: "Pendente" }, // Contando todos os pendentes
+    });
+
+    const mappedTaxes = taxes.map((tax) => ({
+      // mapeando as taxes para o formata especifico para mostrar no frontend
 
       id: tax.id,
       customerId: tax.customerId,
@@ -79,17 +109,24 @@ export async function getAllToDoTaxes(): Promise<CustomerInvoiceProps[]> {
       tax_status: tax.tax_status,
       issued_date: tax.issued_date,
       customer_name: tax.customer.customer_name,
-    }))
+    }));
 
-    return mappedTaxes;
-
+    return {
+      taxes: mappedTaxes,
+      totalTaxes,
+      page,
+      totalPages: Math.ceil(totalTaxes / limit),
+    } as PaginationTaxProps;
+    
   } catch (error) {
     console.log(error);
     throw new Error("Erro ao buscar NFS-e");
   }
 }
 
-export async function getSearchCustomerTaxes(customer_name: CustomerInvoiceProps["customer_name"]) {
+export async function getSearchCustomerTaxes(
+  customer_name: CustomerInvoiceProps["customer_name"],
+) {
   try {
     const customers = await prisma.customer.findMany({
       where: {
@@ -105,20 +142,20 @@ export async function getSearchCustomerTaxes(customer_name: CustomerInvoiceProps
       },
     });
 
-    if(!customers.length) {
+    if (!customers.length) {
       throw new Error("Nenhum cliente encontrado");
     }
 
-    const taxes = customers.flatMap((customer) => 
+    const taxes = customers.flatMap((customer) =>
       customer.taxInvoices.map((tax) => ({
         id: tax.id,
         customer_name: customer.customer_name,
         price: tax.price,
         service: tax.service,
         tax_status: tax.tax_status,
-        issued_date: tax.issued_date
-      }))
-  );
+        issued_date: tax.issued_date,
+      })),
+    );
 
     if (!customer_name) {
       console.log(!customer_name);

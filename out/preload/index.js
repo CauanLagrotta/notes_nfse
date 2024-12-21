@@ -6,8 +6,8 @@ const api = {
   createCustomer: async (data) => {
     return await electron.ipcRenderer.invoke("createCustomer", data);
   },
-  getCustomers: async () => {
-    return await electron.ipcRenderer.invoke("getCustomers");
+  getCustomers: async (page, limit) => {
+    return await electron.ipcRenderer.invoke("getCustomers", page, limit);
   },
   getSearchCustomer: async (data) => {
     return await electron.ipcRenderer.invoke("getSearchCustomer", data);
@@ -22,11 +22,11 @@ const api = {
   createTax: async (dataTax) => {
     return await electron.ipcRenderer.invoke("createTax", dataTax);
   },
-  getAllDoneTaxes: async () => {
-    return await electron.ipcRenderer.invoke("getAllDoneTaxes");
+  getAllDoneTaxes: async (page, limit) => {
+    return await electron.ipcRenderer.invoke("getAllDoneTaxes", page, limit);
   },
-  getAllToDoTaxes: async () => {
-    return await electron.ipcRenderer.invoke("getAllToDoTaxes");
+  getAllToDoTaxes: async (page, limit) => {
+    return await electron.ipcRenderer.invoke("getAllToDoTaxes", page, limit);
   },
   getSearchCustomerTaxes: async (dataTax) => {
     return await electron.ipcRenderer.invoke("getSearchCustomerTaxes", dataTax);

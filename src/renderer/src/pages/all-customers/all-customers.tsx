@@ -8,22 +8,45 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export function AllCustomers() {
-  const [customers, setCustomers] = useState<NewCustomerProps[]>([]);
+  const [customers, setCustomers] = useState<NewCustomerProps[]>([]); // Estado para armazenar os clientes
+  const [page, setPage] = useState(1); // Página atual
+  const [_, setTotal] = useState(0); // Total de clientes
+  const [totalPages, setTotalPages] = useState(1); // Total de páginas
   const [isEditCustomerModalOpen, setIsEditCustomerModalOpen] =
-    useState<boolean>(false);
+    useState<boolean>(false); // Estado para controlar a abertura do modal
   const [selectedCustomer, setSelectedCustomer] =
-    useState<NewCustomerProps | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+    useState<NewCustomerProps | null>(null); // Estado para armazenar o cliente selecionado
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para armazenar o termo de pesquisa
 
   const openEditCustomerModal = (customer: NewCustomerProps) => {
     setSelectedCustomer(customer);
     setIsEditCustomerModalOpen(true);
   };
 
-  const getAllCustomers = () => {
-    window.api.getCustomers().then((customers) => {
+  const getAllCustomers = async (currentPage: number = 1) => {
+    try {
+      const { customers, total, totalPages } = await window.api.getCustomers(
+        currentPage,
+        10,
+      );
+
       setCustomers(customers);
-    });
+      setPage(currentPage);
+      setTotalPages(totalPages);
+      setTotal(total);
+    } catch (error) {
+      console.error("Erro ao buscar clientes:", error);
+      toast.error("Erro ao buscar clientes.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
   };
 
   const handleSearch = async () => {
@@ -85,8 +108,10 @@ export function AllCustomers() {
   };
 
   useEffect(() => {
-    getAllCustomers();
-  }, [searchTerm]);
+    if(!searchTerm.trim()){
+      getAllCustomers(page);
+    }
+  }, [page, searchTerm]);
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -119,7 +144,7 @@ export function AllCustomers() {
                 <th className="p-4">E-mail</th>
                 <th className="p-4">CPF/CNPJ</th>
                 <th className="p-4">Endereço</th>
-                <th className="p-4 ">Ações</th>
+                <th className="p-4">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -163,6 +188,34 @@ export function AllCustomers() {
               ))}
             </tbody>
           </table>
+
+          <div className="flex justify-between items-center mt-4 mb-5">
+            <button
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+              disabled={page === 1}
+              className={`px-4 py-2 rounded-md ${
+                page === 1
+                  ? "bg-gray-300 cursor-not-allowed"
+                  : "bg-cyan-900 text-white"
+              }`}
+            >
+              Anterior
+            </button>
+            <span className="text-gray-600">
+              Página {page} de {totalPages}
+            </span>
+            <button
+              onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={page === totalPages}
+              className={`px-4 py-2 rounded-md ${
+                page === totalPages
+                  ? "bg-gray-300 cursor-not-allowed"
+                  : "bg-cyan-900 text-white"
+              }`}
+            >
+              Próximo
+            </button>
+          </div>
         </div>
       </div>
 

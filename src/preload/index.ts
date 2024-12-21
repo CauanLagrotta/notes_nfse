@@ -17,8 +17,8 @@ const api = {
     return await ipcRenderer.invoke("createCustomer", data);
   },
 
-  getCustomers: async() => {
-    return await ipcRenderer.invoke("getCustomers");
+  getCustomers: async(page: number, limit: number) => {
+    return await ipcRenderer.invoke("getCustomers", page, limit);
   },
 
   getSearchCustomer: async(data: string) => {
@@ -38,12 +38,12 @@ const api = {
     return await ipcRenderer.invoke("createTax", dataTax);
   },
 
-  getAllDoneTaxes: async() => {
-    return await ipcRenderer.invoke("getAllDoneTaxes");
+  getAllDoneTaxes: async(page: number, limit: number) => {
+    return await ipcRenderer.invoke("getAllDoneTaxes", page, limit);
   },
 
-  getAllToDoTaxes: async() => {
-    return await ipcRenderer.invoke("getAllToDoTaxes");
+  getAllToDoTaxes: async(page: number, limit: number) => {
+    return await ipcRenderer.invoke("getAllToDoTaxes", page, limit);
   },
 
   getSearchCustomerTaxes: async(dataTax: string) => {

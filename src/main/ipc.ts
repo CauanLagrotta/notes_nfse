@@ -25,8 +25,8 @@ ipcMain.handle("createCustomer", async (_, data: CustomerProps) => {
   return await createCustomer(data);
 });
 
-ipcMain.handle("getCustomers", async () => {
-  return await getCustomers();
+ipcMain.handle("getCustomers", async (_, page: number, limit: number) => {
+  return await getCustomers(page, limit);
 });
 
 ipcMain.handle("getSearchCustomer", async (_, data: string) => {
@@ -49,12 +49,12 @@ ipcMain.handle("createTax", async (_, dataTax: TaxInvoiceProps) => {
   return await createTax(dataTax);
 });
 
-ipcMain.handle("getAllDoneTaxes", async () => {
-  return await getAllDoneTaxes();
+ipcMain.handle("getAllDoneTaxes", async (_, page: number, limit: number) => {
+  return await getAllDoneTaxes(page, limit);
 });
 
-ipcMain.handle("getAllToDoTaxes", async () => {
-  return await getAllToDoTaxes();
+ipcMain.handle("getAllToDoTaxes", async (_, page: number, limit: number) => {
+  return await getAllToDoTaxes(page, limit);
 });
 
 ipcMain.handle("getSearchCustomerTaxes", async (_, dataTax: string) => {
