@@ -2,6 +2,13 @@
 const electron = require("electron");
 const preload = require("@electron-toolkit/preload");
 const api = {
+  // ================ Backup Controller
+  backupCustomers: async () => {
+    return await electron.ipcRenderer.invoke("backupCustomers");
+  },
+  backupTaxes: async () => {
+    return await electron.ipcRenderer.invoke("backupTaxes");
+  },
   // ================ Customer Controller
   createCustomer: async (data) => {
     return await electron.ipcRenderer.invoke("createCustomer", data);

@@ -1,0 +1,146 @@
+[
+  {
+    "id": 5,
+    "customerId": 1,
+    "price": "500,00",
+    "service": "Teste depois do rework na estilização",
+    "tax_status": "Concluído",
+    "issued_date": "2024-12-30T03:00:00.000Z",
+    "customer": {
+      "id": 1,
+      "customer_name": "Cauanzada",
+      "customer_email": "cauan@test.com",
+      "customer_phone": "(32) 98391-8023",
+      "customer_address": "Rua teste, 123",
+      "customer_cpf": "801.190.543-65"
+    }
+  },
+  {
+    "id": 10,
+    "customerId": 14,
+    "price": "800,00",
+    "service": "teste",
+    "tax_status": "Concluído",
+    "issued_date": "2024-12-19T22:06:34.272Z",
+    "customer": {
+      "id": 14,
+      "customer_name": "dbaksnd",
+      "customer_email": null,
+      "customer_phone": "(09) 10238-0128",
+      "customer_address": "hkasjdas, 312",
+      "customer_cpf": "241.231.231-23"
+    }
+  },
+  {
+    "id": 11,
+    "customerId": 13,
+    "price": "200,00",
+    "service": "teste",
+    "tax_status": "Concluído",
+    "issued_date": "2024-12-19T22:06:42.510Z",
+    "customer": {
+      "id": 13,
+      "customer_name": "haskdasd",
+      "customer_email": null,
+      "customer_phone": "(32) 12897-3912",
+      "customer_address": "Rua, 123",
+      "customer_cpf": "214.123.123-12"
+    }
+  },
+  {
+    "id": 14,
+    "customerId": 18,
+    "price": "433,21",
+    "service": "teste",
+    "tax_status": "Concluído",
+    "issued_date": "2024-12-19T22:07:10.822Z",
+    "customer": {
+      "id": 18,
+      "customer_name": "sjkdaksjhdkajsd",
+      "customer_email": null,
+      "customer_phone": "(32) 12627-3773",
+      "customer_address": "Rua, 123",
+      "customer_cpf": "893.091.283-01"
+    }
+  },
+  {
+    "id": 15,
+    "customerId": 1,
+    "price": "8000,00",
+    "service": "segunda nfs-e",
+    "tax_status": "Concluído",
+    "issued_date": "2024-12-20T14:12:23.852Z",
+    "customer": {
+      "id": 1,
+      "customer_name": "Cauanzada",
+      "customer_email": "cauan@test.com",
+      "customer_phone": "(32) 98391-8023",
+      "customer_address": "Rua teste, 123",
+      "customer_cpf": "801.190.543-65"
+    }
+  },
+  {
+    "id": 16,
+    "customerId": 14,
+    "price": "500,00",
+    "service": "testando paginação",
+    "tax_status": "Pendente",
+    "issued_date": "2024-12-20T14:18:11.206Z",
+    "customer": {
+      "id": 14,
+      "customer_name": "dbaksnd",
+      "customer_email": null,
+      "customer_phone": "(09) 10238-0128",
+      "customer_address": "hkasjdas, 312",
+      "customer_cpf": "241.231.231-23"
+    }
+  },
+  {
+    "id": 17,
+    "customerId": 16,
+    "price": "300,00",
+    "service": "adicionando mais um para teste de paginação",
+    "tax_status": "Pendente",
+    "issued_date": "2024-12-20T14:18:33.296Z",
+    "customer": {
+      "id": 16,
+      "customer_name": "kjhaskdjkasd",
+      "customer_email": null,
+      "customer_phone": "(32) 13190-2380",
+      "customer_address": "Rua, 123",
+      "customer_cpf": "912.830.962-62"
+    }
+  },
+  {
+    "id": 18,
+    "customerId": 18,
+    "price": "600,00",
+    "service": "adicionando mais uma para teste ",
+    "tax_status": "Pendente",
+    "issued_date": "2024-12-20T14:19:14.332Z",
+    "customer": {
+      "id": 18,
+      "customer_name": "sjkdaksjhdkajsd",
+      "customer_email": null,
+      "customer_phone": "(32) 12627-3773",
+      "customer_address": "Rua, 123",
+      "customer_cpf": "893.091.283-01"
+    }
+  },
+  {
+    "id": 19,
+    "customerId": 21,
+    "price": "600,00",
+    "service": "teste de paginação",
+    "tax_status": "Pendente",
+    "issued_date": "2024-12-20T14:19:52.822Z",
+    "customer": {
+      "id": 21,
+      "customer_name": "sdkajsdlkasd",
+      "customer_email": null,
+      "customer_phone": "(32) 18719-8237",
+      "customer_address": "Rua, 123",
+      "customer_cpf": "312.938.109-28"
+    }
+  }
+]

@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "customer_name": "Cauanzada",
+    "customer_email": "cauan@test.com",
+    "customer_phone": "(32) 98391-8023",
+    "customer_address": "Rua teste, 123",
+    "customer_cpf": "801.190.543-65"
+  },
+  {
+    "id": 5,
+    "customer_name": "new customer",
+    "customer_email": "new@customer.com",
+    "customer_phone": "(32) 98190-2312",
+    "customer_address": "Rua de teste, 2019",
+    "customer_cpf": "381.273.891-72"
+  },
+  {
+    "id": 13,
+    "customer_name": "haskdasd",
+    "customer_email": null,
+    "customer_phone": "(32) 12897-3912",
+    "customer_address": "Rua, 123",
+    "customer_cpf": "214.123.123-12"
+  },
+  {
+    "id": 14,
+    "customer_name": "dbaksnd",
+    "customer_email": null,
+    "customer_phone": "(09) 10238-0128",
+    "customer_address": "hkasjdas, 312",
+    "customer_cpf": "241.231.231-23"
+  },
+  {
+    "id": 15,
+    "customer_name": "akshdjkasjkd",
+    "customer_email": null,
+    "customer_phone": "(83) 92018-3019",
+    "customer_address": "Rua, 9210",
+    "customer_cpf": "178.362.981-27"
+  },
+  {
+    "id": 16,
+    "customer_name": "kjhaskdjkasd",
+    "customer_email": null,
+    "customer_phone": "(32) 13190-2380",
+    "customer_address": "Rua, 123",
+    "customer_cpf": "912.830.962-62"
+  },
+  {
+    "id": 17,
+    "customer_name": "saghdkjasndkas",
+    "customer_email": null,
+    "customer_phone": "(03) 82187-9123",
+    "customer_address": "Rua, 123",
+    "customer_cpf": "391.820.121-23"
+  },
+  {
+    "id": 18,
+    "customer_name": "sjkdaksjhdkajsd",
+    "customer_email": null,
+    "customer_phone": "(32) 12627-3773",
+    "customer_address": "Rua, 123",
+    "customer_cpf": "893.091.283-01"
+  },
+  {
+    "id": 19,
+    "customer_name": "Ajshdkajsdjkasd",
+    "customer_email": null,
+    "customer_phone": "(31) 90290-1203",
+    "customer_address": "Rua, 123",
+    "customer_cpf": "301.290.391-20"
+  },
+  {
+    "id": 20,
+    "customer_name": "gdahsgdjhasd",
+    "customer_email": null,
+    "customer_phone": "(32) 10238-9102",
+    "customer_address": "Rua, 123",
+    "customer_cpf": "231.729.381-72"
+  },
+  {
+    "id": 21,
+    "customer_name": "sdkajsdlkasd",
+    "customer_email": null,
+    "customer_phone": "(32) 18719-8237",
+    "customer_address": "Rua, 123",
+    "customer_cpf": "312.938.109-28"
+  },
+  {
+    "id": 25,
+    "customer_name": "Joao silva pereira",
+    "customer_email": "joao@email.com",
+    "customer_phone": "(32) 98192-3081",
+    "customer_address": "Rua de teste, 123",
+    "customer_cpf": "129.038.109-23"
+  }
+]

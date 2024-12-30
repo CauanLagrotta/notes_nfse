@@ -6,6 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BackupCustomersButton } from "../../components/backupCustomersButton";
 
 export function AllCustomers() {
   const [customers, setCustomers] = useState<NewCustomerProps[]>([]); // Estado para armazenar os clientes
@@ -119,6 +120,8 @@ export function AllCustomers() {
       <div className="flex-1 p-8 pl-80">
         <h1 className="text-4xl font-bold text-gray-800 mb-8">Clientes</h1>
 
+        <BackupCustomersButton />
+        
         <div className="flex items-center space-x-4 mb-6">
           <input
             type="text"

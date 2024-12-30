@@ -17,7 +17,18 @@ import {
   updateStatus,
 } from "./controllers/taxController";
 
+import { backupCustomers, backupTaxes } from "./controllers/backupController";
+
 import { type CustomerProps, type TaxInvoiceProps } from "./types/types";
+
+// ================ Backup Controller
+ipcMain.handle("backupCustomers", async () => {
+  return await backupCustomers();
+})
+
+ipcMain.handle("backupTaxes", async () => {
+  return await backupTaxes();
+})
 
 // ================ Customer Controller
 ipcMain.handle("createCustomer", async (_, data: CustomerProps) => {

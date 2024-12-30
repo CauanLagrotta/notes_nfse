@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { EditTaxInvoices } from "../../components/editTaxInvoices";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { BackupTaxesButton } from "../../components/backupTaxesButton";
 
 export function TaxInvoicesDone() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -166,6 +167,9 @@ export function TaxInvoicesDone() {
           NFS-e Emitidas
         </h1>
 
+        {/* Botão de backup */}
+        <BackupTaxesButton />
+        
         {/* Campo de busca */}
         <div className="bg-white p-6 shadow rounded-lg mb-8">
           <h2 className="text-xl font-semibold text-gray-700 mb-4">

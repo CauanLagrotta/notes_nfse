@@ -12,6 +12,15 @@ declare global {
 // Custom APIs for renderer
 const api = {
 
+  // ================ Backup Controller
+  backupCustomers: async() => {
+    return await ipcRenderer.invoke("backupCustomers");
+  },
+
+  backupTaxes: async() => {
+    return await ipcRenderer.invoke("backupTaxes");
+  },
+
   // ================ Customer Controller
   createCustomer: async(data: CustomerProps) => {
     return await ipcRenderer.invoke("createCustomer", data);
